@@ -19,6 +19,7 @@ A reusable Agent Skill that applies a set of engineering conventions — **witho
 | 3 | **Memory** | Use `with` for files/images; release image caches with `del` + `gc.collect()` after each one; stream large files; generators instead of full lists |
 | 4 | **faiss Retrieval** | Use faiss indexes for large-scale lookup/comparison (never brute-force loops); `float32` + L2 normalization; index by scale; batched `add`/`search`; persist and release indexes |
 | 5 | **Error Prevention** | Validate inputs first; catch specific exceptions (no bare `except:`); release resources in `finally`; never hardcode paths/secrets; atomic writes; minimal test cases before delivery |
+| 6 | **Testing** | After writing code, run **10 samples** from the default path to verify correctness; if no default path is given, **ask the user** for a test path — never fabricate or skip |
 
 ## Directory Structure
 
@@ -32,7 +33,8 @@ python-coding-guardrails/
     ├── concurrency.md        # Thread/process speedups, order preservation, thread safety
     ├── memory.md             # Memory management, image cache release, streaming
     ├── faiss.md              # faiss indexing, batched search, index persistence
-    └── error-safety.md       # Error-prevention checklist, exception rules, atomic writes
+    ├── error-safety.md       # Error-prevention checklist, exception rules, atomic writes
+    └── sampling-test.md      # 10-sample smoke testing: sampling, running, asking the user for a path
 ```
 
 ## Installation
@@ -120,6 +122,7 @@ AI first walks through the mandatory checklist in `SKILL.md`, then reads the mat
 | `references/memory.md` | Context managers, per-image `del` + `gc.collect()`, streaming reads, generators, concurrency memory caps |
 | `references/faiss.md` | When to use, `float32` + normalization, `IndexFlatIP`/`IndexIVFFlat` selection, batched queries, persistence & release |
 | `references/error-safety.md` | Input validation, exception rules, no hardcoding, atomic writes, observability, minimal verification |
+| `references/sampling-test.md` | 10-sample sampling (even coverage head/mid/tail), run & assertions, asking the user when no path, re-run all after fixes |
 
 ## Validation
 
