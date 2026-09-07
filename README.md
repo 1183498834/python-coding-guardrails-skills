@@ -1,12 +1,14 @@
 # Python Coding Guardrails
 
-> AI 写代码时的强制质量护栏 Skill · 适用于豆包（Doubao）与 Trae
+> 通用 Agent Skill：AI 写代码时的强制质量护栏
+>
+> 适用于 **Claude Code · Codex · Doubao（豆包） · Trae** 及一切支持 [Agent Skills 开放规范](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills) 的 AI 编程工具
 >
 > [English](README.en.md) | 简体中文
 
 一个可复用的 Agent Skill：当 AI 编写、优化或重构 Python 脚本时，自动应用一套"不改变程序逻辑"的工程规范——路径参数、并发提速、内存管理、faiss 大规模检索、防错检查。
 
-豆包与 Trae 均遵循 [Agent Skills 开放规范](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills)（`SKILL.md` + YAML frontmatter），因此**同一份 Skill 文件夹两端通用**，无需为每个平台各写一份。
+**通用性说明**：本 Skill 本体（`SKILL.md` + `references/`）不绑定任何具体平台，只要是遵循 Agent Skills 开放规范（`SKILL.md` + YAML frontmatter）的工具即可直接使用，**同一份文件夹无需修改**。下方给出各平台的安装位置。
 
 ## 核心规则
 
@@ -23,7 +25,7 @@
 ```
 python-coding-guardrails/
 ├── SKILL.md                  # 触发描述 + 强制检查清单（AI 写代码前逐条核对）
-├── README.md                 # 本文档（中文，仅供 GitHub 展示，非技能组成部分）
+├── README.md                 # 本文档（中文，仅供展示，非技能组成部分）
 ├── README.en.md              # 本文档（英文）
 └── references/               # 按主题拆分的详细规则，AI 按需加载
     ├── cli-paths.md          # argparse 与路径规范、代码示例
@@ -35,11 +37,52 @@ python-coding-guardrails/
 
 ## 安装与部署
 
-> 部署后**新开会话**生效；两端 AI 会通过 `SKILL.md` 的 `description` 自动发现并触发。
+> 通用步骤：把整个 `python-coding-guardrails` 文件夹放到目标工具对应的技能目录即可。部署后**新开会话**生效；各工具会通过 `SKILL.md` 的 `description` 自动发现并触发。
 
-### 豆包（Doubao）
+| 平台 | 全局路径（所有项目） | 项目路径（仅当前项目） |
+| --- | --- | --- |
+| **Claude Code** | `~/.claude/skills/python-coding-guardrails` | `<项目根>/.claude/skills/python-coding-guardrails` |
+| **Codex** | `~/.codex/skills/python-coding-guardrails` | `<项目根>/.agents/skills/python-coding-guardrails`（新版路径，可能随版本调整） |
+| **Doubao（豆包）** | `<workspace>/.user_skills/python-coding-guardrails` | — |
+| **Trae** | `~/.trae/skills/python-coding-guardrails` | `<项目根>/.trae/skills/python-coding-guardrails` |
 
-将 `python-coding-guardrails` 文件夹复制到豆包工作区的用户技能目录：
+### Claude Code
+
+```bash
+# 方式一：全局安装（所有项目可用）
+mkdir -p ~/.claude/skills
+git clone https://github.com/1183498834/python-coding-guardrails-skills.git
+cp -r python-coding-guardrails-skills ~/.claude/skills/python-coding-guardrails
+
+# 方式二：项目级安装
+cp -r python-coding-guardrails-skills <你的项目>/.claude/skills/python-coding-guardrails
+
+# 方式三：直接在 Claude Code 对话中说：
+#   "安装这个 skill：https://github.com/1183498834/python-coding-guardrails-skills"
+```
+
+### Codex
+
+```bash
+# 方式一：全局安装
+mkdir -p ~/.codex/skills
+cp -r python-coding-guardrails-skills ~/.codex/skills/python-coding-guardrails
+
+# 方式二：项目级安装（新版 Codex 用 .agents/skills）
+cp -r python-coding-guardrails-skills <你的项目>/.agents/skills/python-coding-guardrails
+
+# 方式三：用 skills CLI 一键安装
+npx skills add https://github.com/1183498834/python-coding-guardrails-skills --skill python-coding-guardrails
+
+# 方式四：直接在 Codex 对话中说：
+#   "安装这个 skill：https://github.com/1183498834/python-coding-guardrails-skills"
+```
+
+> Codex 的技能目录在不同版本有调整（`.codex/skills` 与 `.agents/skills`），安装后可用 `codex --help` 或官方文档确认当前版本的实际路径。
+
+### Doubao（豆包）
+
+将文件夹复制到豆包工作区的用户技能目录：
 
 ```
 <workspace>/.user_skills/python-coding-guardrails
@@ -89,4 +132,5 @@ python scripts/quick_validate.py python-coding-guardrails
 ## 相关链接
 
 - [Anthropic Agent Skills 规范](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills)
+- [Claude Code Skills 文档](https://docs.anthropic.com/en/docs/claude-code/slash-commands)
 - [Trae 技能文档](https://docs.trae.cn/ide_skills)
