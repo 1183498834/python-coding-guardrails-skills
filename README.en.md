@@ -1,12 +1,14 @@
 # Python Coding Guardrails
 
-> A mandatory quality-guardrail Skill for AI-assisted Python coding · Works with Doubao and Trae
+> A universal Agent Skill: mandatory quality guardrails for AI-assisted Python coding
+>
+> Works with **Claude Code · Codex · Doubao · Trae** and any AI coding tool that follows the [Agent Skills open standard](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills)
 >
 > English | [简体中文](README.md)
 
 A reusable Agent Skill that applies a set of engineering conventions — **without changing program behavior** — whenever AI writes, optimizes, or refactors Python scripts: CLI/path handling, concurrency speedups, memory management, faiss for large-scale retrieval, and error-prevention checks.
 
-Both Doubao and Trae follow the [Agent Skills open standard](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills) (`SKILL.md` + YAML frontmatter), so **the same Skill folder works on both platforms** — no need to write separate versions.
+**Universal**: the Skill itself (`SKILL.md` + `references/`) is not tied to any specific platform. Any tool that follows the Agent Skills open standard (`SKILL.md` + YAML frontmatter) can use it directly — **the same folder, no modifications needed**. Installation locations for each platform are listed below.
 
 ## Core Rules
 
@@ -23,7 +25,7 @@ Both Doubao and Trae follow the [Agent Skills open standard](https://www.anthrop
 ```
 python-coding-guardrails/
 ├── SKILL.md                  # Trigger description + mandatory checklist (checked before writing code)
-├── README.md                 # This document (Chinese, for GitHub display only — not part of the Skill)
+├── README.md                 # This document (Chinese, for display only — not part of the Skill)
 ├── README.en.md              # This document (English)
 └── references/               # Topic-specific rules, loaded on demand by AI
     ├── cli-paths.md          # argparse & path conventions, code examples
@@ -35,11 +37,52 @@ python-coding-guardrails/
 
 ## Installation
 
-> Deploy the folder, then **start a new session** for it to take effect. Both platforms auto-discover the Skill via the `description` in `SKILL.md`.
+> Generic steps: copy the whole `python-coding-guardrails` folder into the skill directory of your tool. Take effect in a **new session**; tools auto-discover the Skill via the `description` in `SKILL.md`.
+
+| Platform | Global path (all projects) | Project path (current project only) |
+| --- | --- | --- |
+| **Claude Code** | `~/.claude/skills/python-coding-guardrails` | `<project-root>/.claude/skills/python-coding-guardrails` |
+| **Codex** | `~/.codex/skills/python-coding-guardrails` | `<project-root>/.agents/skills/python-coding-guardrails` (newer versions; may vary) |
+| **Doubao** | `<workspace>/.user_skills/python-coding-guardrails` | — |
+| **Trae** | `~/.trae/skills/python-coding-guardrails` | `<project-root>/.trae/skills/python-coding-guardrails` |
+
+### Claude Code
+
+```bash
+# Option 1: global install (all projects)
+mkdir -p ~/.claude/skills
+git clone https://github.com/1183498834/python-coding-guardrails-skills.git
+cp -r python-coding-guardrails-skills ~/.claude/skills/python-coding-guardrails
+
+# Option 2: project-level install
+cp -r python-coding-guardrails-skills <your-project>/.claude/skills/python-coding-guardrails
+
+# Option 3: just ask Claude Code in a conversation:
+#   "Install this skill: https://github.com/1183498834/python-coding-guardrails-skills"
+```
+
+### Codex
+
+```bash
+# Option 1: global install
+mkdir -p ~/.codex/skills
+cp -r python-coding-guardrails-skills ~/.codex/skills/python-coding-guardrails
+
+# Option 2: project-level install (newer Codex uses .agents/skills)
+cp -r python-coding-guardrails-skills <your-project>/.agents/skills/python-coding-guardrails
+
+# Option 3: one-command install with skills CLI
+npx skills add https://github.com/1183498834/python-coding-guardrails-skills --skill python-coding-guardrails
+
+# Option 4: just ask Codex in a conversation:
+#   "Install this skill: https://github.com/1183498834/python-coding-guardrails-skills"
+```
+
+> Codex's skill directory has changed across versions (`.codex/skills` vs `.agents/skills`); after installing, confirm the actual path with `codex --help` or the official docs.
 
 ### Doubao
 
-Copy the `python-coding-guardrails` folder into the user skills directory of your Doubao workspace:
+Copy the folder into the user skills directory of your Doubao workspace:
 
 ```
 <workspace>/.user_skills/python-coding-guardrails
@@ -89,4 +132,5 @@ python scripts/quick_validate.py python-coding-guardrails
 ## Links
 
 - [Anthropic Agent Skills](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills)
+- [Claude Code Skills docs](https://docs.anthropic.com/en/docs/claude-code/slash-commands)
 - [Trae Skills Docs](https://docs.trae.cn/ide_skills)
